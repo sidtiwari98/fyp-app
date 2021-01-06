@@ -11,9 +11,9 @@ function Routes() {
   return (
     <Switch>
       <Route  path="/" exact component={LoginPage} />
-      <Route path="/stations/:id" component={StorePage} />
+      <Route path="/stations/:station" component={StorePage} />
       <Route path="/stations" component={StationPage} />
-      {/* redirect user to Login page if route does not exist */}
+      {/* redirect user to NotFoundPage if route does not exist */}
       <Route component={NotFoundPage} />
     </Switch>
   );
