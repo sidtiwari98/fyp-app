@@ -5,7 +5,7 @@ export default function DefaultLayout(props) {
     return (
       <div>
         <div className = "header_container">
-          <TopBar/>
+          <TopBar {...props}/>
         </div>
           {props.children}
       </div>
