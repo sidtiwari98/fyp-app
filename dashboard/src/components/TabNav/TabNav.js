@@ -5,15 +5,20 @@ import Tabs from '@material-ui/core/Tabs';
 
 const useStyles = makeStyles({
   root: {
-    flexGrow: 1,
-    width: "100%"
+    width: "50%",
   },
+  container: {
+    display: "flex",
+    width: "100%",
+    justifyContent: "center"
+  }
 });
 
 export default function TabNav(props) {
   const classes = useStyles();
  
   return (
+    <div className = {classes.container}>
     <Paper className={classes.root}>
       <Tabs
         value={props.value}
@@ -25,5 +30,6 @@ export default function TabNav(props) {
         {props.children}
       </Tabs>
     </Paper>
+    </div>
   );
 }

@@ -4,6 +4,9 @@
     flex-direction: column;
     padding: 2%;
 }
+.heading_stats{
+    text-align: center;
+}
 .chart_container{
     display: flex;
     justify-content: center;

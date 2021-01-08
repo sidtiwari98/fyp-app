@@ -48,6 +48,7 @@ export default function StatsPage(props) {
     return (
         <DefaultLayout>
             <div className="main_contianer">
+                <h1 className = "heading_stats">Statistics for 7-Eleven</h1>
                 <TabNav value={value} handleChange={handleChange} >
                     <Tab label="1 Month" />
                     <Tab label="3 Months" />
