@@ -17,7 +17,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function TopBar() {
+export default function TopBar(props) {
   const classes = useStyles();
 
   return (
@@ -25,7 +25,7 @@ export default function TopBar() {
       <AppBar position="static">
         <Toolbar>
           <Typography variant="h6" className={classes.title}>
-            Header Bar
+            {props.title}
           </Typography>
           <Button color="inherit">Log Out</Button>
         </Toolbar>
