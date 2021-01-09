@@ -1,5 +1,28 @@
 .main_contianer{
     display: flex;
     justify-content: center;
+    flex-direction: column;
+    padding: 2%;
+}
+.heading_stats{
+    text-align: center;
+}
+.chart_container{
+    display: flex;
+    justify-content: center;
     align-items: center;
+    flex-direction: row;
+}
+
+.graph_container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    padding: 2%;
+}
+.chart_heading{
+    padding: 5%;
+    font-weight: bold;
+    font-size: 24px
 }

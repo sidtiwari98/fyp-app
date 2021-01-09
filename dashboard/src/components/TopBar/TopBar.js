@@ -4,6 +4,8 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
+import logo from '../../static/images/MTR_logo.png'
+import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -15,19 +17,27 @@ const useStyles = makeStyles((theme) => ({
   title: {
     flexGrow: 1,
   },
+  image: {
+    margin: theme.spacing(0, 1, 0, -1),
+    height: "50px",
+  },
 }));
 
 export default function TopBar(props) {
   const classes = useStyles();
+  let history = useHistory();
 
   return (
     <div className={classes.root}>
-      <AppBar position="static">
+      <AppBar style={{ backgroundColor: "#F14C38" }} position="static">
         <Toolbar>
+          <img src={logo} alt="logo" className={classes.image}></img>
           <Typography variant="h6" className={classes.title}>
             {props.title}
           </Typography>
-          <Button color="inherit">Log Out</Button>
+          {
+            props.notLogin !== true && <Button onClick={() => history.push("/")}color="inherit">Log Out</Button>
+          }
         </Toolbar>
       </AppBar>
     </div>

@@ -5,23 +5,24 @@ import Tabs from '@material-ui/core/Tabs';
 
 const useStyles = makeStyles({
   root: {
-    flexGrow: 1,
+    width: "50%",
   },
+  container: {
+    display: "flex",
+    width: "100%",
+    justifyContent: "center"
+  }
 });
 
 export default function TabNav(props) {
   const classes = useStyles();
-  const [value, setValue] = React.useState(0);
-
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
-  };
-
+ 
   return (
+    <div className = {classes.container}>
     <Paper className={classes.root}>
       <Tabs
         value={props.value}
-        onChange={handleChange}
+        onChange={props.handleChange}
         indicatorColor="primary"
         textColor="primary"
         centered
@@ -29,5 +30,6 @@ export default function TabNav(props) {
         {props.children}
       </Tabs>
     </Paper>
+    </div>
   );
 }
