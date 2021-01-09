@@ -8,6 +8,7 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
+import {Link } from "react-router-dom";
 
 const StyledTableCell = withStyles((theme) => ({
   head: {
@@ -64,6 +65,7 @@ const sortedRows = rows.sort((a, b) => b.violations - a.violations);
 
 export default function StationPage(props) {
   const classes = useStyles();
+  let stationName = props.match.params.stationName
 
   return (
     <DefaultLayout title="Station">
@@ -82,7 +84,7 @@ export default function StationPage(props) {
               {sortedRows.map((row) => (
                 <StyledTableRow key={row.name}>
                   <StyledTableCell>{row.category}</StyledTableCell>
-                  <StyledTableCell>{row.store}</StyledTableCell>
+                  <StyledTableCell><Link to = {`${stationName}/${row.store}`} style={{ textDecoration: 'none', color: 'black' }}>{row.store}</Link></StyledTableCell>
                   <StyledTableCell>{row.storeNumber}</StyledTableCell>
                   <StyledTableCell>{row.violations}</StyledTableCell>
                 </StyledTableRow>

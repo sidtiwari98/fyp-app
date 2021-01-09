@@ -12,6 +12,7 @@ import {
 import {makeStyles} from "@material-ui/core/styles";
 import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
 import {mtrData} from "../../static/constants";
+import {Link} from 'react-router-dom'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -53,7 +54,7 @@ export default function HomePage(props) {
                                                         color: mtrData[line].color,
                                                         fontSize: 17
                                                     }}/></ListItemIcon>
-                                                    <ListItemText>{station}</ListItemText>
+                                                    <ListItemText><Link to = {`/home/${station}`} style={{ textDecoration: 'none', color: 'black' }}>{station}</Link></ListItemText>
                                                 </ListItem>
                                                 <Divider/>
                                             </>
