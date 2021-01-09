@@ -1,10 +1,10 @@
 export const PieChartData1Month = [
-    { name: '7-11', value: 2 },
+    { name: '7-Eleven', value: 2 },
     { name: 'Others', value: 8 },
   ];
   
 export const PieChartData3Month = [
-    { name: '7-11', value: 4 },
+    { name: '7-Eleven', value: 4 },
     { name: 'Others', value: 6 },
   ];
   

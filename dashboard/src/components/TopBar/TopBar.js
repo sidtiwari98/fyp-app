@@ -36,7 +36,7 @@ export default function TopBar(props) {
             {props.title}
           </Typography>
           {
-            props.notLogin !== true && <Button onClick={() => history.push("/")}color="inherit">Log Out</Button>
+            props.notLogin !== true && <Button onClick={() => history.push("/")} color="inherit">Log Out</Button>
           }
         </Toolbar>
       </AppBar>
