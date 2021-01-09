@@ -11,7 +11,7 @@ import {
 } from "@material-ui/core";
 import {makeStyles} from "@material-ui/core/styles";
 import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
-import mtrData from "../../mtrData";
+import {mtrData} from "../../static/constants";
 
 const useStyles = makeStyles((theme) => ({
     root: {
