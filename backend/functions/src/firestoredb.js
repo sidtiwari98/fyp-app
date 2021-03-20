@@ -1,7 +1,9 @@
 // The Firebase Admin SDK to access Firestore.
-const admin = require('firebase-admin');
+// const admin = require('firebase-admin');
+const firebase = require('firebase');
 
-admin.initializeApp();
-const db = admin.firestore();
+firebase.initializeApp({ projectId: "syp-fyp" });
+const db = firebase.firestore();
+db.useEmulator("localhost", 8080);
 
 module.exports = db
