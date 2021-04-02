@@ -1,6 +1,7 @@
 const db = require('./firestoredb');
 const firebase = require('firebase')
 const functions = require('firebase-functions');
+const moment = require('moment');
 
 
 exports.getTags = async (req, res) => {
@@ -25,13 +26,12 @@ exports.addTag = async (req, res) => {
     functions.logger.info("Will add tag now!", {structuredData: true});
     // Grab the text parameter.
     const {tagID} = req.body;
-    const time = firebase.firestore.Timestamp.now();
+    const time = moment().format("x");
 
     try {
         // Push the new message into Firestore using the Firebase Admin SDK.
-        const ref = db.collection('tags').doc(time.toMillis().toString())
         const tagsRead = await db.collection('tags')
-            .where('time', '>' ,firebase.firestore.Timestamp.fromMillis(time.toMillis()-2000))
+            .where('time', '>' ,time-1000)
             .get()
 
         if (tagsRead.empty){
@@ -46,10 +46,24 @@ exports.addTag = async (req, res) => {
                     frequency[tagID]=1;
                 }
             })
-            let currTag = Object.entries(frequency).reduce((prev, curr) => prev[1] < curr[1] ? prev : curr);
-
+            functions.logger.info("frequency map", frequency);
+            let maxFrequencyTag = Object.entries(frequency).reduce((prev, curr) => prev[1] > curr[1] ? prev : curr)[0];
+            functions.logger.info("max frequency tag", maxFrequencyTag);
+            if (tagID.toString() === maxFrequencyTag.toString()){
+                const avgTimeRef = db.collection('averageTime').doc(maxFrequencyTag)
+                let tagTime = await avgTimeRef.get()
+                if (tagTime.exists){
+                    const data = tagTime.data();
+                    await avgTimeRef.update({avgTime: ((data.avgTime*data.count)+parseInt(time))/(data.count+1), count: data.count+1})
+                } else {
+                    await avgTimeRef.set({tagID, avgTime: parseInt(time), count: 1 })
+                }
+            } else {
+                functions.logger.info("type mismatch", tagID, maxFrequencyTag);
+            }
         }
-        await ref.set({tagID, time});
+        const ref = db.collection('tags').doc(time)
+        await ref.set({tagID, time: parseInt(time)});
         functions.logger.info(`Tag with ID: ${tagID} detected and added with UID ${ref.id}.`)
 
         // Send back a message that we've successfully written the message

@@ -34,11 +34,11 @@ exports.makeUppercase = functions.firestore.document('/messages/{documentId}')
         return snap.ref.set({uppercase}, {merge: true});
     });
 
-exports.checkSpeed = functions.firestore.document('/tags/{id}').onCreate(async (snap, context) => {
-    const {tagID, time} = snap.data();
+exports.checkSpeed = functions.firestore.document('/averageTime/{id}').onUpdate(async (snap, context) => {
+    const {tagID, avgTime, count} = snap.data();
     // TODO: need to add a tag to position mapping which has the distance b/w tags to get distance
     // will hardcode distance and not check for if the tags just created is next to the last created one
-    const  tagsRef = db.collection('tags')
+    const  tagsRef = db.collection('averageTime')
     let lastDetected = await tagsRef
         .orderBy('time', 'desc')
         .limit(2)
@@ -48,8 +48,8 @@ exports.checkSpeed = functions.firestore.document('/tags/{id}').onCreate(async (
         functions.logger.info("no previous tags detected");
     } else {
         lastDetected = lastDetected.docs[1]
-        console.log(time, lastDetected.data().time)
-        const diffDuration = time.toMillis() - lastDetected.data().time.toMillis();
+        console.log(avgTime, lastDetected.data().avgTime)
+        const diffDuration = avgTime - lastDetected.data().avgTime;
         functions.logger.info(`difference in time is ${diffDuration}`);
         let speed = 3/(diffDuration*1000);
         functions.logger.info(`speed detected is ${speed} m/s`);

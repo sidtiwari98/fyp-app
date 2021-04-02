@@ -4,12 +4,15 @@ service cloud.firestore {
     match /tags/{uid} {
       allow create: if
           request.resource.data.tagID is number &&
-          request.resource.data.time is timestamp;
+          request.resource.data.time is number;
       allow read: if true;
       allow update, delete: if true;
     }
+    match /averageTime/{uid} {
+      allow read, write: if true;
+    }
     match /messages/{document=**} {
       allow read, write: if true;
-  }
+    }
   }
 }
