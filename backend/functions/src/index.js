@@ -1,7 +1,7 @@
 // The Cloud Functions for Firebase SDK to create Cloud Functions and setup triggers.
 const functions = require('firebase-functions');
 const express = require('express');
-const {getTags, addTag} = require("./tags");
+const {getTags, addTag, stop} = require("./tags");
 const {addMessage} = require('./message');
 const app = express();
 const db = require('./firestoredb');
@@ -14,6 +14,7 @@ app.get('/', (request, response) => {
 app.get('/addMessage', addMessage);
 app.post('/tag', addTag);
 app.get('/tags', getTags)
+app.get('/stop', stop)
 
 // Listens for new messages added to /messages/:documentId/original and creates an
 // uppercase version of the message to /messages/:documentId/uppercase
