@@ -49,9 +49,9 @@ exports.checkSpeed = functions.firestore.document('/tags/{id}').onCreate(async (
     } else {
         lastDetected = lastDetected.docs[1]
         console.log(time, lastDetected.data().time)
-        const diffDuration = time.seconds - lastDetected.data().time.seconds;
+        const diffDuration = time.toMillis() - lastDetected.data().time.toMillis();
         functions.logger.info(`difference in time is ${diffDuration}`);
-        let speed = 3/diffDuration;
+        let speed = 3/(diffDuration*1000);
         functions.logger.info(`speed detected is ${speed} m/s`);
     }
     return null

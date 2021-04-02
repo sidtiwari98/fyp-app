@@ -30,6 +30,25 @@ exports.addTag = async (req, res) => {
     try {
         // Push the new message into Firestore using the Firebase Admin SDK.
         const ref = db.collection('tags').doc(time.toMillis().toString())
+        const tagsRead = await db.collection('tags')
+            .where('time', '>' ,firebase.firestore.Timestamp.fromMillis(time.toMillis()-2000))
+            .get()
+
+        if (tagsRead.empty){
+            functions.logger.info("no previous tags detected");
+        } else {
+            let frequency = {}
+            tagsRead.docs.forEach((tag) => {
+                const tagID = tag.data().tagID
+                if (frequency.hasOwnProperty(tagID)) {
+                    frequency[tagID]+=1;
+                } else {
+                    frequency[tagID]=1;
+                }
+            })
+            let currTag = Object.entries(frequency).reduce((prev, curr) => prev[1] < curr[1] ? prev : curr);
+
+        }
         await ref.set({tagID, time});
         functions.logger.info(`Tag with ID: ${tagID} detected and added with UID ${ref.id}.`)
 
@@ -47,9 +66,13 @@ exports.stop = async (req, res) => {
     const collectionRef = db.collection('tags');
     const query = collectionRef.orderBy('__name__').limit(10);
 
-    return new Promise((resolve, reject) => {
+    let delPromise = await new Promise((resolve, reject) => {
         deleteQueryBatch(db, query, resolve).catch(reject);
     });
+
+    functions.logger.info(delPromise);
+    return res.json({msg: "Done"});
+
 
     async function deleteQueryBatch(db, query, resolve) {
         const snapshot = await query.get();

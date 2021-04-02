@@ -6,6 +6,7 @@ service cloud.firestore {
           request.resource.data.tagID is number &&
           request.resource.data.time is timestamp;
       allow read: if true;
+      allow update, delete: if true;
     }
     match /messages/{document=**} {
       allow read, write: if true;
