@@ -14,5 +14,11 @@ service cloud.firestore {
     match /messages/{document=**} {
       allow read, write: if true;
     }
+    match /validTags/{uid}{
+      allow read, write: if true;
+    }
+    match /violations/{uid}{
+      allow read, write: if true;
+    }
   }
 }
