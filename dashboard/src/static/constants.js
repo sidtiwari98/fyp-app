@@ -1,3 +1,11 @@
+export const FeedCardData = [
+    {tagID: 101, isAreaViolation: true, isSpeedViolation: false, time: "xyz"},
+    {tagID: 2, prevTagId: 1, isAreaViolation: false, isSpeedViolation: false, speed: 1.5, time: "xyz"},
+    {tagID: 7, prevTagId: 6, isAreaViolation: false, isSpeedViolation: false, speed: 2.5, time: "xyz"},
+    {tagID: 2, prevTagId: 1, isAreaViolation: false, isSpeedViolation: false, speed: 3.5, time: "xyz"},
+]
+
+
 export const PieChartData1Month = [
     { name: '7-Eleven', value: 2 },
     { name: 'Others', value: 8 },
@@ -184,5 +192,4 @@ export const LineChartData1Month = [
             "Tuen Mun"
         ], "color": "#AE0588"
     },
-
 }
