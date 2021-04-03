@@ -93,12 +93,21 @@ exports.addTag = async (req, res) => {
 exports.stop = async (req, res) => {
     functions.logger.info("Will stop session now!", {structuredData: true});
 
-    const collectionRef = db.collection('tags');
-    const query = collectionRef.orderBy('__name__').limit(10);
+    const tagsRef = db.collection('tags');
+    const tagsQuery = tagsRef.orderBy('__name__').limit(10);
 
-    let delPromise = await new Promise((resolve, reject) => {
-        deleteQueryBatch(db, query, resolve).catch(reject);
-    });
+    const avgTimeRef = db.collection('averageTime');
+    const avgTimeQuery = avgTimeRef.orderBy('__name__').limit(10);
+
+    clearDB = [
+        new Promise((resolve, reject) => {
+            deleteQueryBatch(db, tagsQuery, resolve).catch(reject);
+        }),
+        new Promise((resolve, reject) => {
+            deleteQueryBatch(db, avgTimeQuery, resolve).catch(reject);
+        })
+    ]
+    let delPromise = await Promise.all(clearDB)
 
     functions.logger.info(delPromise);
     return res.json({msg: "Done"});
