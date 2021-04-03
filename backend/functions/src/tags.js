@@ -28,6 +28,22 @@ exports.addTag = async (req, res) => {
     const {tagID} = req.body;
     const time = moment().format("x");
 
+    try{
+        let tagToCheck = await db.collection('validTags').doc(tagID.toString()).get()
+        if (!tagToCheck.exists){
+            functions.logger.info(`ERROR: Tag ${tagID} is invalid`)
+            res.status(500).send(`ERROR: Tag ${tagID} is invalid`);
+        }
+        if(!tagToCheck.data().isAuth){
+            const areaViolation = await db.collection('violations').add({tagID, isAreaViolation: true,  isSpeedViolation: false, time: parseInt(time)})
+            functions.logger.info(`Tag with ID: ${tagID} detected as area violation with uid ${areaViolation.id}`)
+            res.json({result:`Tag with ID: ${tagID} detected as violation with uid ${areaViolation.id}`})
+        }
+    }catch(error){
+        functions.logger.error(error)
+        res.status(500).send(error);
+    }
+
     try {
         // Push the new message into Firestore using the Firebase Admin SDK.
         const tagsRead = await db.collection('tags')
@@ -110,5 +126,20 @@ exports.stop = async (req, res) => {
         process.nextTick(() => {
             deleteQueryBatch(db, query, resolve);
         });
+    }
+}
+
+exports.addValidTags = async (req, res) =>{
+    const {tagID} = req.body
+    const {isAuth} = req.body
+    try{
+        const tagInfo = db.collection('validTags').doc(tagID.toString())
+        await tagInfo.set({tagID, isAuth})
+        functions.logger.info(`Tag with ID: ${tagID} added as a valid Tag`)
+        res.json({result:`Tag with ID: ${tagID} added as a valid Tag`})
+    }
+    catch(error){
+        functions.logger.error(error)
+        res.status(500).send(error); 
     }
 }
