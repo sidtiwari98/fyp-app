@@ -112,7 +112,7 @@ export default function HomePage(props) {
                         })}
                     </div>
                     <div className = {classes.violationDiv}>
-                        {violationsList.map((cardData, index)=>{
+                        {violationsList.sort((a, b) => parseInt(a.time) < parseInt(b.time) ? 1 : -1).map((cardData, index)=>{
                             return (
                                 <div key = {index}>
                                     <FeedCard 
