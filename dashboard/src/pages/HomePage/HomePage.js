@@ -1,5 +1,5 @@
-import React from 'react';
-import DefaultLayout from "../DefaultLayout/DefaultLayout";
+import React, { useState, useEffect } from 'react';
+import * as FirestoreService from '../../services/firestore';
 import {
     Accordion,
     AccordionDetails,
@@ -9,12 +9,12 @@ import {
     ListItemText,
     Typography
 } from "@material-ui/core";
-import {makeStyles} from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core/styles";
 import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
-import {mtrData} from "../../static/constants";
-import {Link} from 'react-router-dom'
-import {FeedCardData} from '../../static/constants'
+import {Link} from 'react-router-dom';
+import { mtrData } from '../../static/constants';
 import FeedCard from '../../components/FeedCard/FeedCard';
+import DefaultLayout from "../DefaultLayout/DefaultLayout";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -53,6 +53,28 @@ const useStyles = makeStyles((theme) => ({
 
 export default function HomePage(props) {
     const classes = useStyles('blue');
+    const [averageTimeList, setAverageTimeList] = useState(undefined)
+    const [violationsList, setViolationsList] = useState([])
+
+    useEffect(() => {
+        function fetchAverageTime() {
+            FirestoreService.getaverageTimeList((data) => {
+                console.log(data)
+                setAverageTimeList(data)
+            })
+        }
+        fetchAverageTime()
+    }, []);
+
+    useEffect(() => {
+        function fetchViolations() {
+            FirestoreService.getViolationsList((data) => {
+                console.log(data)
+                setViolationsList(data)
+            })
+        }
+        fetchViolations()
+    }, []);
 
     return (
         <DefaultLayout title="Home">
@@ -89,20 +111,21 @@ export default function HomePage(props) {
                             )
                         })}
                     </div>
-                        <div className = {classes.violationDiv}>
-                            {FeedCardData.map((cardData, index)=>{
-                                return(
+                    <div className = {classes.violationDiv}>
+                        {violationsList.map((cardData, index)=>{
+                            return (
+                                <div key = {index}>
                                     <FeedCard 
-                                    key = {index}
                                     alertType = {cardData['isAreaViolation'] ? 'Area Violation' : 'Speed Violation'} 
                                     timeStamp = {cardData['time']}
                                     tagID = {cardData['tagID']}
                                     previoustagID = {!cardData['isAreaViolation'] && cardData['prevTagId']} 
                                     speed = {!cardData['isAreaViolation'] && cardData['speed']} 
                                     />
-                                )
-                            })}
-                        </div>
+                                </div>
+                            )
+                        })}
+                    </div>
                 </div>
             </div>
         </DefaultLayout>
