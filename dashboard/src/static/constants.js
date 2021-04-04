@@ -1,8 +1,8 @@
 export const FeedCardData = [
     {tagID: 101, isAreaViolation: true, isSpeedViolation: false, time: "xyz"},
-    {tagID: 2, prevTagId: 1, isAreaViolation: false, isSpeedViolation: false, speed: 1.5, time: "xyz"},
-    {tagID: 7, prevTagId: 6, isAreaViolation: false, isSpeedViolation: false, speed: 2.5, time: "xyz"},
-    {tagID: 2, prevTagId: 1, isAreaViolation: false, isSpeedViolation: false, speed: 3.5, time: "xyz"},
+    {tagID: 2, prevTagId: 1, isAreaViolation: false, isSpeedViolation: true, speed: 1.5, time: "xyz"},
+    {tagID: 7, prevTagId: 6, isAreaViolation: false, isSpeedViolation: true, speed: 2.5, time: "xyz"},
+    {tagID: 2, prevTagId: 1, isAreaViolation: false, isSpeedViolation: true, speed: 3.5, time: "xyz"},
 ]
 
 
