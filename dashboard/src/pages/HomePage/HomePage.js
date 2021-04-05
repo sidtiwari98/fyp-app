@@ -57,24 +57,24 @@ export default function HomePage(props) {
     const [violationsList, setViolationsList] = useState([])
 
     useEffect(() => {
-        function fetchAverageTime() {
-            FirestoreService.getaverageTimeList((data) => {
+        const averageTimeUnsub = FirestoreService.getaverageTimeList((data) => {
                 console.log(data)
                 setAverageTimeList(data)
             })
+        return () => {
+            averageTimeUnsub()
         }
-        fetchAverageTime()
-    }, []);
+    }, [FirestoreService]);
 
     useEffect(() => {
-        function fetchViolations() {
-            FirestoreService.getViolationsList((data) => {
+        const violationListUnsub = FirestoreService.getViolationsList((data) => {
                 console.log(data)
                 setViolationsList(data)
             })
+        return () => {
+            violationListUnsub()
         }
-        fetchViolations()
-    }, []);
+    }, [FirestoreService]);
 
     return (
         <DefaultLayout title="Home">
