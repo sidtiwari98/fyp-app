@@ -1,5 +1,6 @@
 import firebase from "firebase/app";
 import "firebase/firestore";
+import moment from 'moment'
 
 firebase.initializeApp({ projectId: "syp-fyp" });
 const db = firebase.firestore();
@@ -16,10 +17,13 @@ export const getaverageTimeList = (callback) => {
 };
 
 export const getViolationsList = (callback) => {
+    const startOfDayTime = moment().startOf('day').format("x");
     return db.collection('violations').onSnapshot((querySnapshot) => {
         var violationsList = [];
         querySnapshot.forEach((doc) => {
-            violationsList.push(doc.data());
+            if (parseInt(doc.data().time) >= parseInt(startOfDayTime)) {
+                violationsList.push(doc.data());
+            }
         });
         callback(violationsList)
     });
