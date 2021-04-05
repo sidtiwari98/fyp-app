@@ -7,7 +7,7 @@ const db = firebase.firestore();
 db.useEmulator("localhost", 8080);
 
 export const getaverageTimeList = (callback) => {
-    db.collection('averageTime').onSnapshot((querySnapshot) => {
+    return db.collection('averageTime').onSnapshot((querySnapshot) => {
         var averageTimeList = [];
         querySnapshot.forEach((doc) => {
             averageTimeList.push(doc.data());
@@ -18,7 +18,7 @@ export const getaverageTimeList = (callback) => {
 
 export const getViolationsList = (callback) => {
     const startOfDayTime = moment().startOf('day').format("x");
-    db.collection('violations').onSnapshot((querySnapshot) => {
+    return db.collection('violations').onSnapshot((querySnapshot) => {
         var violationsList = [];
         querySnapshot.forEach((doc) => {
             if (parseInt(doc.data().time) >= parseInt(startOfDayTime)) {

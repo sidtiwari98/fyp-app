@@ -45,14 +45,14 @@ export default function FeedCard(props) {
           <strong>Tag ID: </strong>{props.tagID}
         </Typography>
         {props.alertType === 'Speed Violation' && 
-        <div>
+        <>
           <Typography className={classes.pos} color="textSecondary">
             <strong>Previous Tag ID: </strong>{props.previoustagID}
           </Typography>
           <Typography className={classes.pos} color="textSecondary">
             <strong>Speed: </strong>{props.speed} m/s
           </Typography>
-        </div>
+        </>
         }
       </CardContent>
     </Card>
