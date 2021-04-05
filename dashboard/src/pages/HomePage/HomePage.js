@@ -15,18 +15,23 @@ import {Link} from 'react-router-dom';
 import { mtrData } from '../../static/constants';
 import FeedCard from '../../components/FeedCard/FeedCard';
 import DefaultLayout from "../DefaultLayout/DefaultLayout";
+import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
+import MapIcon from '@material-ui/icons/Map';
+import { green } from '@material-ui/core/colors';
+import Button from '@material-ui/core/Button';
 
 const useStyles = makeStyles((theme) => ({
     root: {
         display: 'flex',
         flexDirection: "row",
-        padding: 25
+        padding: 25,
     },
     mainContianer: {
-        padding: '1%'
+        padding: '1%',
     },
     headingDashboard: {
-        textAlign: 'center'
+        textAlign: 'center',
+        fontFamily: 'Raleway, sans-serif'
     },
     linesDiv:{
         width: '70%',
@@ -47,7 +52,7 @@ const useStyles = makeStyles((theme) => ({
         // borderLeft: '1px solid #808080',
         borderBlockEnd: '1px solid #808080',
         overflow: 'scroll',
-        width: '400px'
+        width: '400px',
     }
 }));
 
@@ -97,9 +102,30 @@ export default function HomePage(props) {
                                                         <ListItem>
                                                             <ListItemIcon><FiberManualRecordIcon style={{
                                                                 color: mtrData[line].color,
-                                                                fontSize: 17
+                                                                fontSize: 17,
                                                             }}/></ListItemIcon>
-                                                            <ListItemText><Link to = {`/home/${station}`} style={{ textDecoration: 'none', color: 'black' }}>{station}</Link></ListItemText>
+                                                            {/* <div className = {classes.stationsNamesContainer}> */}
+                                                                <ListItemText>{station}</ListItemText>
+                                                                <Link to = {`/home/${station}`} style={{ textDecoration: 'none', color: 'black' }}>
+                                                                <Button
+                                                                    variant="contained"
+                                                                    size="small"
+                                                                    color="secondary"
+                                                                    startIcon={<ShoppingCartIcon />}
+                                                                >
+                                                                    View Shops
+                                                                </Button>
+                                                                </Link>
+                                                                <span style = {{paddingRight: '5px'}}/>
+                                                                <Button
+                                                                    variant="contained"
+                                                                    size="small"
+                                                                    color="default"
+                                                                    startIcon={<MapIcon />}
+                                                                >
+                                                                    View Map
+                                                                </Button>
+                                                            {/* </div> */}
                                                         </ListItem>
                                                         <Divider/>
                                                     </>
@@ -117,10 +143,10 @@ export default function HomePage(props) {
                                 <div key = {index}>
                                     <FeedCard 
                                     alertType = {cardData['isAreaViolation'] ? 'Area Violation' : 'Speed Violation'} 
-                                    timeStamp = {cardData['time']}
+                                    timeStamp = {new Date(cardData['time']).toLocaleString('default')}
                                     tagID = {cardData['tagID']}
                                     previoustagID = {!cardData['isAreaViolation'] && cardData['prevTagId']} 
-                                    speed = {!cardData['isAreaViolation'] && cardData['speed']} 
+                                    speed = {!cardData['isAreaViolation'] && parseFloat(cardData['speed']).toFixed(2)} 
                                     />
                                 </div>
                             )

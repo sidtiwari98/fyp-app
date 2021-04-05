@@ -3,6 +3,7 @@
     justify-content: center;
     flex-direction: column;
     padding: 2%;
+    font-family: Raleway, sans-serif;
 }
 .heading_stats{
     text-align: center;
@@ -25,5 +26,5 @@
     padding: 5%;
     font-weight: bold;
     font-size: 24px;
-    text-align: center
+    text-align: center;
 }

@@ -16,6 +16,7 @@ const useStyles = makeStyles((theme) => ({
   },
   title: {
     flexGrow: 1,
+    fontFamily: 'Raleway, sans-serif'
   },
   image: {
     margin: theme.spacing(0, 1, 0, -1),
@@ -36,7 +37,7 @@ export default function TopBar(props) {
             {props.title}
           </Typography>
           {
-            props.notLogin !== true && <Button onClick={() => history.push("/")} color="inherit">Log Out</Button>
+            props.notLogin !== true && <Button onClick={() => history.push("/")} color="inherit" style={{fontFamily: 'Raleway, sans-serif'}}>Log Out</Button>
           }
         </Toolbar>
       </AppBar>
