@@ -39,7 +39,7 @@ export default function FeedCard(props) {
           <strong>Violation type: </strong>{props.alertType}
         </Typography>
         <Typography className={classes.pos} color="textSecondary">
-          <strong>Time: </strong>{props.timeStamp}
+          <strong>Date and Time: </strong>{props.timeStamp}
         </Typography>
         <Typography className={classes.pos} color="textSecondary">
           <strong>Tag ID: </strong>{props.tagID}

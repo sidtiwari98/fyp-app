@@ -34,6 +34,7 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
+    fontFamily: 'Raleway, sans-serif !important'
   },
   avatar: {
     margin: theme.spacing(1),

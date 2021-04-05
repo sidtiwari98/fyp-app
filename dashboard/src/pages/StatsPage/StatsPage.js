@@ -52,8 +52,8 @@ export default function StatsPage(props) {
             <div className="main_contianer">
                 <h1 className = "heading_stats">Statistics for {shopName}</h1>
                 <TabNav value={value} handleChange={handleChange} >
-                    <Tab label="1 Month" />
-                    <Tab label="3 Months" />
+                    <Tab style = {{fontFamily: 'Raleway, sans-serif'}} label="1 Month" />
+                    <Tab style = {{fontFamily: 'Raleway, sans-serif'}} label="3 Months" />
                 </TabNav>
                 <TabPanel value={value} index={0}>
                     <Graphs />

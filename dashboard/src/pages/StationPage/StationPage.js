@@ -17,6 +17,7 @@ const StyledTableCell = withStyles((theme) => ({
   },
   body: {
     fontSize: 14,
+    fontFamily: 'Raleway, sans-serif'
   },
 }))(TableCell);
 
@@ -84,7 +85,7 @@ export default function StationPage(props) {
               {sortedRows.map((row) => (
                 <StyledTableRow key={row.name}>
                   <StyledTableCell>{row.category}</StyledTableCell>
-                  <StyledTableCell><Link to = {`${stationName}/${row.store}`} style={{ textDecoration: 'none', color: 'black' }}>{row.store}</Link></StyledTableCell>
+                  <StyledTableCell><Link to = {`${stationName}/${row.store}`} style={{ textDecoration: 'underline', color: 'black' }}>{row.store}</Link></StyledTableCell>
                   <StyledTableCell>{row.storeNumber}</StyledTableCell>
                   <StyledTableCell>{row.violations}</StyledTableCell>
                 </StyledTableRow>
