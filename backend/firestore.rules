@@ -3,7 +3,7 @@ service cloud.firestore {
   match /databases/{database}/documents {
     match /tags/{uid} {
       allow create: if
-          request.resource.data.tagID is number &&
+          request.resource.data.tagID is string &&
           request.resource.data.time is number;
       allow read: if true;
       allow update, delete: if true;
