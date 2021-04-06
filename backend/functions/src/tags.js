@@ -28,16 +28,12 @@ exports.addTag = async (req, res) => {
     const {tagID} = req.body;
     const time = moment().format("x");
 
+    let tagToCheck;
     try{
-        let tagToCheck = await db.collection('validTags').doc(tagID.toString()).get()
+        tagToCheck = await db.collection('validTags').doc(tagID.toString()).get()
         if (!tagToCheck.exists){
             functions.logger.info(`ERROR: Tag ${tagID} is invalid`)
             res.status(500).send(`ERROR: Tag ${tagID} is invalid`);
-        }
-        if(!tagToCheck.data().isAuth){
-            const areaViolation = await db.collection('violations').add({tagID, isAreaViolation: true,  isSpeedViolation: false, time: parseInt(time)})
-            functions.logger.info(`Tag with ID: ${tagID} detected as area violation with uid ${areaViolation.id}`)
-            res.json({result:`Tag with ID: ${tagID} detected as violation with uid ${areaViolation.id}`})
         }
     }catch(error){
         functions.logger.error(error)
@@ -66,13 +62,18 @@ exports.addTag = async (req, res) => {
             let maxFrequencyTag = Object.entries(frequency).reduce((prev, curr) => prev[1] > curr[1] ? prev : curr)[0];
             functions.logger.info("max frequency tag", maxFrequencyTag);
             if (tagID.toString() === maxFrequencyTag.toString()){
-                const avgTimeRef = db.collection('averageTime').doc(maxFrequencyTag)
+                const avgTimeRef = db.collection('averageTime').doc(tagID)
                 let tagTime = await avgTimeRef.get()
                 if (tagTime.exists){
                     const data = tagTime.data();
                     await avgTimeRef.update({avgTime: ((data.avgTime*data.count)+parseInt(time))/(data.count+1), count: data.count+1})
                 } else {
                     await avgTimeRef.set({tagID, avgTime: parseInt(time), count: 1 })
+                }
+                if(!tagToCheck.data().isAuth){
+                    const areaViolation = await db.collection('violations').add({tagID, isAreaViolation: true,  isSpeedViolation: false, time: parseInt(time)})
+                    functions.logger.info(`Tag with ID: ${tagID} detected as area violation with uid ${areaViolation.id}`)
+                    res.json({result:`Tag with ID: ${tagID} detected as violation with uid ${areaViolation.id}`})
                 }
             } else {
                 functions.logger.info("type mismatch", tagID, maxFrequencyTag);
