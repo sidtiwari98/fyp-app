@@ -2,17 +2,17 @@ import firebase from "firebase/app";
 import "firebase/firestore";
 import moment from 'moment'
 
-firebase.initializeApp({ projectId: "syp-fyp" });
+firebase.initializeApp({projectId: "syp-fyp"});
 const db = firebase.firestore();
 db.useEmulator("localhost", 8080);
 
-export const getaverageTimeList = (callback) => {
+export const getCurrentTagData = (callback) => {
     return db.collection('averageTime').onSnapshot((querySnapshot) => {
-        var averageTimeList = [];
-        querySnapshot.forEach((doc) => {
-            averageTimeList.push(doc.data());
-        });
-        callback(averageTimeList)
+        if (querySnapshot.docChanges().length > 1) {
+            console.info("More than 1 changes detected in averageTime DB: Most likely first render/rerender", querySnapshot.docChanges())
+        } else if (querySnapshot.docChanges().length === 1) {
+            callback(querySnapshot.docChanges()[0].doc.data())
+        }
     });
 };
 

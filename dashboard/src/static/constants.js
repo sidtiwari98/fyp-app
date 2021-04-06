@@ -1,34 +1,34 @@
 export const FeedCardData = [
     {tagID: 101, isAreaViolation: true, isSpeedViolation: false, time: "xyz"},
     {tagID: 5, prevTagId: 6, isAreaViolation: false, isSpeedViolation: true, speed: 1.5, time: "xyz"},
-    {tagID: 7, isAreaViolation: true, isSpeedViolation: false , time: "xyz"},
+    {tagID: 7, isAreaViolation: true, isSpeedViolation: false, time: "xyz"},
     {tagID: 2, prevTagId: 1, isAreaViolation: false, isSpeedViolation: true, speed: 3.5, time: "xyz"},
 ]
 
-export const tagID = [
-    { tagID: '34180080f860301806b3601900000000', refNum: 1 },
-    { tagID: '3418013301021803055F0001', refNum: 2 },
-    { tagID: 'E28011700000020CC2A18272', refNum: 3 },
-    { tagID: '3418013301021803055F0015', refNum: 4 },
-    { tagID: 'E28011700000020CC2A18252', refNum: 5 },
-    { tagID: 'E280117000000020CC2A160F2', refNum: 6 },
-    { tagID: 'E28011700000020CC2A18212', refNum: 7 },
-    { tagID: 'E28011700000020CC2A18232', refNum: 8 },
-    { tagID: '0000013301021803055E0003', refNum: 9 },
-    { tagID: 'E28011700000020CC2A182B2', refNum: 10 },
-    { tagID: 'E28011700000020CC2A18292', refNum: 11 }
-]
+export const localTagIdReference = {
+    "34180080f860301806b3601900000000": 0,
+    "3418013301021803055F0001": 1,
+    "E28011700000020CC2A18272": 2,
+    "3418013301021803055F0015": 3,
+    "E28011700000020CC2A18252": 4,
+    "E280117000000020CC2A160F2": 5,
+    "E28011700000020CC2A18212": 6,
+    "E28011700000020CC2A18232": 7,
+    "0000013301021803055E0003": 8,
+    "E28011700000020CC2A182B2": 9,
+    "E28011700000020CC2A18292": 10
+}
 
 export const PieChartData1Month = [
-    { name: '7-Eleven', value: 2 },
-    { name: 'Others', value: 8 },
-  ];
-  
+    {name: '7-Eleven', value: 2},
+    {name: 'Others', value: 8},
+];
+
 export const PieChartData3Month = [
-    { name: '7-Eleven', value: 4 },
-    { name: 'Others', value: 6 },
-  ];
-  
+    {name: '7-Eleven', value: 4},
+    {name: 'Others', value: 6},
+];
+
 export const PieChartColors = ['#0088FE', '#00C49F'];
 
 
@@ -45,9 +45,9 @@ export const LineChartData1Month = [
     {
         name: 'Week 4', Current_Shop: 1, Average_of_All_Shops_in_MTR: 5,
     }
-  ];
+];
 
-  export const LineChartData3Month = [
+export const LineChartData3Month = [
     {
         name: 'October', Current_Shop: 12, Average_of_All_Shops_in_MTR: 40,
     },
@@ -57,9 +57,9 @@ export const LineChartData1Month = [
     {
         name: 'December', Current_Shop: 9, Average_of_All_Shops_in_MTR: 51,
     },
-  ];
+];
 
-  export const mtrData = {
+export const mtrData = {
     "Island Line": {
         "stations": [
             "Kennedy Town",

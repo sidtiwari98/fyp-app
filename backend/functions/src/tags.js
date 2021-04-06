@@ -1,5 +1,4 @@
 const db = require('./firestoredb');
-const firebase = require('firebase')
 const functions = require('firebase-functions');
 const moment = require('moment');
 
@@ -24,7 +23,6 @@ exports.getTags = async (req, res) => {
 
 exports.addTag = async (req, res) => {
     functions.logger.info("Will add tag now!", {structuredData: true});
-    // Grab the text parameter.
     const {tagID} = req.body;
     const time = moment().format("x");
 
@@ -41,7 +39,6 @@ exports.addTag = async (req, res) => {
     }
 
     try {
-        // Push the new message into Firestore using the Firebase Admin SDK.
         const tagsRead = await db.collection('tags')
             .where('time', '>' ,time-1000)
             .get()
@@ -73,7 +70,6 @@ exports.addTag = async (req, res) => {
                 if(!tagToCheck.data().isAuth){
                     const areaViolation = await db.collection('violations').add({tagID, isAreaViolation: true,  isSpeedViolation: false, time: parseInt(time)})
                     functions.logger.info(`Tag with ID: ${tagID} detected as area violation with uid ${areaViolation.id}`)
-                    res.json({result:`Tag with ID: ${tagID} detected as violation with uid ${areaViolation.id}`})
                 }
             } else {
                 functions.logger.info("type mismatch", tagID, maxFrequencyTag);

@@ -1,26 +1,25 @@
-import React, { useState, useEffect } from 'react';
-import * as FirestoreService from '../../services/firestore';
+import React, {useState, useEffect} from 'react';
 import {
     Accordion,
     AccordionDetails,
-    AccordionSummary, Chip, Divider,
+    AccordionSummary, Chip, Divider, IconButton,
     List,
-    ListItem, ListItemIcon,
-    ListItemText,
+    ListItem, ListItemIcon, ListItemSecondaryAction,
+    ListItemText, Tooltip,
     Typography
 } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
+import {makeStyles} from "@material-ui/core/styles";
 import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
 import {Link} from 'react-router-dom';
-import { mtrData } from '../../static/constants';
-import FeedCard from '../../components/FeedCard/FeedCard';
-import DefaultLayout from "../DefaultLayout/DefaultLayout";
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import MapIcon from '@material-ui/icons/Map';
-import { green } from '@material-ui/core/colors';
-import Button from '@material-ui/core/Button';
+import {mtrData} from '../../static/constants';
+import * as FirestoreService from '../../services/firestore';
+import FeedCard from '../../components/FeedCard/FeedCard';
+import DefaultLayout from "../DefaultLayout/DefaultLayout";
+import Map from "../../components/Map";
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
     root: {
         display: 'flex',
         flexDirection: "row",
@@ -33,11 +32,10 @@ const useStyles = makeStyles((theme) => ({
         textAlign: 'center',
         fontFamily: 'Raleway, sans-serif'
     },
-    linesDiv:{
+    linesDiv: {
         width: '70%',
         height: '500px',
         overflow: 'scroll',
-        borderBlockEnd: '1px solid #808080',
     },
     accordion: {
         width: "100%",
@@ -49,50 +47,46 @@ const useStyles = makeStyles((theme) => ({
     violationDiv: {
         marginLeft: '30px',
         height: '500px',
-        // borderLeft: '1px solid #808080',
-        borderBlockEnd: '1px solid #808080',
         overflow: 'scroll',
         width: '400px',
     }
 }));
 
-export default function HomePage(props) {
+export default function HomePage() {
     const classes = useStyles('blue');
-    const [averageTimeList, setAverageTimeList] = useState(undefined)
+    const [currentTagData, setCurrentTagData] = useState(undefined)
     const [violationsList, setViolationsList] = useState([])
 
     useEffect(() => {
-        const averageTimeUnsub = FirestoreService.getaverageTimeList((data) => {
-                console.log(data)
-                setAverageTimeList(data)
-            })
+        const averageTimeUnsub = FirestoreService.getCurrentTagData((data) => {
+            setCurrentTagData(data)
+        })
         return () => {
             averageTimeUnsub()
         }
-    }, [FirestoreService]);
+    }, []);
 
     useEffect(() => {
         const violationListUnsub = FirestoreService.getViolationsList((data) => {
-                console.log(data)
-                setViolationsList(data)
-            })
+            setViolationsList(data)
+        })
         return () => {
             violationListUnsub()
         }
-    }, [FirestoreService]);
+    }, []);
 
     return (
         <DefaultLayout title="Home">
             <div className={classes.mainContianer}>
-            <h1 className = {classes.headingDashboard}>Welcome to your Dashboard</h1>
+                <h1 className={classes.headingDashboard}>Welcome to your Dashboard</h1>
                 <div className={classes.root}>
-                    <div className = {classes.linesDiv}>
+                    <div className={classes.linesDiv}>
                         {Object.keys(mtrData).map((line) => {
                             return (
-                                <Accordion className={classes.accordion}>
+                                <Accordion className={classes.accordion} key={line}>
                                     <AccordionSummary aria-controls="panel1d-content" id="panel1d-header">
                                         <Chip label={<Typography>{line}</Typography>}
-                                            style={{backgroundColor: mtrData[line].color, color: 'white'}}/>
+                                              style={{backgroundColor: mtrData[line].color, color: 'white'}}/>
                                     </AccordionSummary>
                                     <AccordionDetails>
                                         <List className={classes.list}>
@@ -100,32 +94,32 @@ export default function HomePage(props) {
                                                 return (
                                                     <>
                                                         <ListItem>
-                                                            <ListItemIcon><FiberManualRecordIcon style={{
-                                                                color: mtrData[line].color,
-                                                                fontSize: 17,
-                                                            }}/></ListItemIcon>
-                                                            {/* <div className = {classes.stationsNamesContainer}> */}
+                                                            <ListItemIcon>
+                                                                <FiberManualRecordIcon style={{
+                                                                    color: mtrData[line].color,
+                                                                    fontSize: 17,
+                                                                }}/>
+                                                            </ListItemIcon>
+                                                            <div className={classes.stationsNamesContainer}>
                                                                 <ListItemText>{station}</ListItemText>
-                                                                <Link to = {`/home/${station}`} style={{ textDecoration: 'none', color: 'black' }}>
-                                                                <Button
-                                                                    variant="contained"
-                                                                    size="small"
-                                                                    color="secondary"
-                                                                    startIcon={<ShoppingCartIcon />}
-                                                                >
-                                                                    View Shops
-                                                                </Button>
-                                                                </Link>
-                                                                <span style = {{paddingRight: '5px'}}/>
-                                                                <Button
-                                                                    variant="contained"
-                                                                    size="small"
-                                                                    color="default"
-                                                                    startIcon={<MapIcon />}
-                                                                >
-                                                                    View Map
-                                                                </Button>
-                                                            {/* </div> */}
+                                                                <ListItemSecondaryAction>
+                                                                    <Link to={`/home/${station}`} style={{
+                                                                        textDecoration: 'none',
+                                                                        color: 'black'
+                                                                    }}>
+                                                                        <Tooltip title="View Shops">
+                                                                            <IconButton>
+                                                                                <ShoppingCartIcon/>
+                                                                            </IconButton>
+                                                                        </Tooltip>
+                                                                    </Link>
+                                                                    <Tooltip title="View Map">
+                                                                        <IconButton onClick={() => document.getElementById('canvas').scrollIntoView({behavior: "smooth"})}>
+                                                                            <MapIcon/>
+                                                                        </IconButton>
+                                                                    </Tooltip>
+                                                                </ListItemSecondaryAction>
+                                                            </div>
                                                         </ListItem>
                                                         <Divider/>
                                                     </>
@@ -137,21 +131,25 @@ export default function HomePage(props) {
                             )
                         })}
                     </div>
-                    <div className = {classes.violationDiv}>
-                        {violationsList.sort((a, b) => parseInt(a.time) < parseInt(b.time) ? 1 : -1).map((cardData, index)=>{
+                    <div className={classes.violationDiv}>
+                        {violationsList.sort((a, b) => parseInt(a.time) < parseInt(b.time) ? 1 : -1).map((cardData, index) => {
                             return (
-                                <div key = {index}>
-                                    <FeedCard 
-                                    alertType = {cardData['isAreaViolation'] ? 'Area Violation' : 'Speed Violation'} 
-                                    timeStamp = {new Date(cardData['time']).toLocaleString('default')}
-                                    tagID = {cardData['tagID']}
-                                    previoustagID = {!cardData['isAreaViolation'] && cardData['prevTagId']} 
-                                    speed = {!cardData['isAreaViolation'] && parseFloat(cardData['speed']).toFixed(2)} 
+                                <div key={index}>
+                                    <FeedCard
+                                        alertType={cardData['isAreaViolation'] ? 'Area Violation' : 'Speed Violation'}
+                                        timeStamp={new Date(cardData['time']).toLocaleString('default')}
+                                        tagID={cardData['tagID']}
+                                        previoustagID={!cardData['isAreaViolation'] && cardData['prevTagId']}
+                                        speed={!cardData['isAreaViolation'] && parseFloat(cardData['speed']).toFixed(2)}
                                     />
                                 </div>
                             )
                         })}
                     </div>
+                </div>
+                <Divider variant="middle"/>
+                <div style={{height: "100%", width: "100%"}}>
+                    <Map currentTagData={currentTagData}/>
                 </div>
             </div>
         </DefaultLayout>
