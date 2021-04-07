@@ -18,6 +18,8 @@ import * as FirestoreService from '../../services/firestore';
 import FeedCard from '../../components/FeedCard/FeedCard';
 import DefaultLayout from "../DefaultLayout/DefaultLayout";
 import Map from "../../components/Map";
+import Snackbar from '@material-ui/core/Snackbar';
+import CloseIcon from '@material-ui/icons/Close';
 
 const useStyles = makeStyles(() => ({
     root: {
@@ -49,6 +51,14 @@ const useStyles = makeStyles(() => ({
         height: '500px',
         overflow: 'scroll',
         width: '400px',
+    },
+    noViolations: {
+        display: 'flex',
+        marginLeft: '30px',
+        height: '500px',
+        width: '400px',
+        alignItems: 'center',
+        fontSize: '32px',
     }
 }));
 
@@ -56,6 +66,7 @@ export default function HomePage() {
     const classes = useStyles('blue');
     const [currentTagData, setCurrentTagData] = useState(undefined)
     const [violationsList, setViolationsList] = useState([])
+    const [open, setOpen] = React.useState(false);
 
     useEffect(() => {
         const averageTimeUnsub = FirestoreService.getCurrentTagData((data) => {
@@ -69,12 +80,26 @@ export default function HomePage() {
     useEffect(() => {
         const violationListUnsub = FirestoreService.getViolationsList((data) => {
             setViolationsList(data)
+            if (data.length > 0){
+                handleClick()
+            }
         })
         return () => {
             violationListUnsub()
         }
     }, []);
 
+    const handleClick = () => {
+        setOpen(true);
+      };
+    
+    const handleClose = (event, reason) => {
+        if (reason === 'clickaway') {
+          return;
+        }
+    
+        setOpen(false);
+    };
     return (
         <DefaultLayout title="Home">
             <div className={classes.mainContianer}>
@@ -132,26 +157,49 @@ export default function HomePage() {
                         })}
                     </div>
                     <div className={classes.violationDiv}>
-                        {violationsList.sort((a, b) => parseInt(a.time) < parseInt(b.time) ? 1 : -1).map((cardData, index) => {
-                            return (
-                                <div key={index}>
-                                    <FeedCard
-                                        alertType={cardData['isAreaViolation'] ? 'Area Violation' : 'Speed Violation'}
-                                        timeStamp={new Date(cardData['time']).toLocaleString('default')}
-                                        tagID={cardData['tagID']}
-                                        previoustagID={!cardData['isAreaViolation'] && cardData['prevTagId']}
-                                        speed={!cardData['isAreaViolation'] && parseFloat(cardData['speed']).toFixed(2)}
-                                    />
+                                    {violationsList.length ===0 ?
+                                        <div className = {classes.noViolations}>
+                                            No Violations for today
+                                        </div>
+                                    :
+                                        violationsList.sort((a, b) => parseInt(a.time) < parseInt(b.time) ? 1 : -1).map((cardData, index) => {
+                                            return (
+                                                <div key={index}>
+                                                    <FeedCard
+                                                        alertType={cardData['isAreaViolation'] ? 'Area Violation' : 'Speed Violation'}
+                                                        timeStamp={new Date(cardData['time']).toLocaleString('default')}
+                                                        tagID={cardData['tagID']}
+                                                        previoustagID={!cardData['isAreaViolation'] && cardData['prevTagId']}
+                                                        speed={!cardData['isAreaViolation'] && parseFloat(cardData['speed']).toFixed(2)}
+                                                    />
+                                                </div>
+                                            )
+                                        })
+                                }
                                 </div>
-                            )
-                        })}
-                    </div>
                 </div>
                 <Divider variant="middle"/>
                 <div style={{height: "100%", width: "100%"}}>
                     <Map currentTagData={currentTagData}/>
                 </div>
             </div>
+            <Snackbar
+                anchorOrigin={{
+                vertical: 'top',
+                horizontal: 'right',
+                }}
+                open={open}
+                autoHideDuration={6000}
+                onClose={handleClose}
+                message="ALERT: A Violation has been detected."
+                action={
+                <React.Fragment>
+                    <IconButton size="small" aria-label="close" color="inherit" onClick={handleClose}>
+                    <CloseIcon fontSize="small" />
+                    </IconButton>
+                </React.Fragment>
+                }
+            />
         </DefaultLayout>
     );
 }
